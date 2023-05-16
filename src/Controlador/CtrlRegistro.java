@@ -47,7 +47,18 @@ public class CtrlRegistro {
                 }
 
                 Cuenta cuentaAux = new Cuenta();
-                cuentaAux.setUsuario(new Usuario(correo, contra, telefono));
+                Usuario usuario = new Usuario(correo, contra, telefono);
+                
+                if(!usuario.validarCorreo(correo)){
+                    JOptionPane.showMessageDialog(vista, "CORREO INVÁLIDO");
+                    return;
+                }
+                
+                if(!usuario.validarContraseña(contra)) {
+                    JOptionPane.showMessageDialog(vista, "CONTRASEÑA INVÁLIDA");
+                    return;
+                }
+                cuentaAux.setUsuario(usuario);
                 modelo.agregarCuenta(cuentaAux);
 
                 modelo.cambiarEstadoSesion(correo);
