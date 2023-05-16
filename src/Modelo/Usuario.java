@@ -18,18 +18,16 @@ public class Usuario implements Serializable {
     /*===========
       Constructor
     =============*/
-    public Usuario(String Correo, String contraseña) {
-        this.correo = Correo;
+    public Usuario(String correo, String contraseña) {
+        this.correo = correo;
         this.contraseña = contraseña;
         this.estadoDeConexion = Boolean.FALSE;
         this.dispositivosConectados = 0;
     }
 
-    public Usuario(String Correo, String contraseña, String telefono) {
-        this.correo = Correo;
-        this.contraseña = contraseña;
+    public Usuario(String correo, String contraseña, String telefono) {
+        this(correo, contraseña);
         this.telefono = telefono;
-        this.estadoDeConexion = Boolean.FALSE;
     }
 
     public Usuario() {
@@ -71,17 +69,15 @@ public class Usuario implements Serializable {
     }
 
     public boolean validarCorreoContraseña(String correo, String contraseña) {
-        if (this.correo.equals(correo) && this.contraseña.equals(contraseña)) {
-            return true;
-        }
-        return false;
+        return this.correo.equals(correo) && this.contraseña.equals(contraseña);
     }
 
     public boolean validarCorreo(String correo) {
-        if (this.correo.equals(correo)) {
-            return true;
-        }
-        return false;
+        return correo.length() > 5 && correo.contains("@");
+    }
+    
+    public boolean validarContraseña(String contraseña) {
+        return contraseña.length() >= 8;
     }
 
     public int getDispositivosConectados() {
@@ -126,4 +122,8 @@ public class Usuario implements Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" + "correo=" + correo + ", contrase\u00f1a=" + contraseña + '}';
+    }
 }
