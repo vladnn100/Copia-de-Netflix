@@ -38,6 +38,7 @@ public class CtrlEditarContrasena {
 
                 try {
                     modelo.cuentaActiva(auxCorreo).getUsuario().disminuirDispositivo();
+                    vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     //GUARDANDO LOS CAMBIOS EN EL ARCHIVO//
                     Archivo archivo = new Archivo();
                     archivo.serializar(Archivo.archivoArregloCuentas, modelo);
@@ -82,6 +83,10 @@ public class CtrlEditarContrasena {
                     // // // // // // // // // // // // // // 
                 } catch (CustomException e) {
                     System.out.println("EXCEPCION: " + e.getMessage());
+                }finally {
+                    vista.txtContrasena.setSelectionStart(0);
+                    vista.txtContrasena.setSelectionEnd(vista.txtContrasena.getText().length());
+                    return;
                 }
 
             }
