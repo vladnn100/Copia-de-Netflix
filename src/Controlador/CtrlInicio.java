@@ -82,9 +82,11 @@ public class CtrlInicio {
             }
             try {
                 boolean estaVerificado = modelo1.verificarEstadoSesion(correo);
-                modelo1.validarInicioSesion(correo, contraseña);
                 if (!estaVerificado) {
+                    modelo1.validarInicioSesion(correo, contraseña);
                     modelo1.cambiarEstadoSesion(correo);
+                    int n = modelo1.cuentaActiva(correo).getUsuario().getDispositivosConectados();
+                    int max = (int) ((modelo1.cuentaActiva(correo).getSuscripcion().getMembresia().getPantallas()) - 1);
                     if (!modelo1.cuentaActiva(correo).getSuscripcion().getEstadoMembresia()) {
                         vista.dispose();
                         System.out.println("CORREO: "+correo);
@@ -107,6 +109,9 @@ public class CtrlInicio {
                         ctrlPerfil.init();
                     }
                 } else {
+                    int n = modelo1.cuentaActiva(correo).getUsuario().getDispositivosConectados();
+                    int max = (int) ((modelo1.cuentaActiva(correo).getSuscripcion().getMembresia().getPantallas()) - 1);
+                    modelo1.validarInicioSesion(correo, contraseña);
                     //JOptionPane.showMessageDialog(vista, "¡Bienvenido a Netflix!");
                     if (!modelo1.cuentaActiva(correo).getSuscripcion().getEstadoMembresia()) {
                         JOptionPane.showMessageDialog(vista, "NO CUENTA CON SUSCRIPCION ACTIVA");
