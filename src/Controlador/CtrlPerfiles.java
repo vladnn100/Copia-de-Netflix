@@ -152,17 +152,19 @@ public class CtrlPerfiles {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    try {
-                        Cuenta c = modelo.cuentaActiva(auxCorreo); // Se obtiene la cuenta activa
+                    Cuenta c = null;
 
-                        if (c.debeCobrar()) { // Si la cuenta debe cobrar
-                            if (!c.cobrar()) { // Si no se puede cobrar
-                                JOptionPane.showMessageDialog(vista, "No cuenta con dinero suficiente para continuar");
-                                return; // Se muestra un mensaje y se termina la ejecución
-                            }
-                        }
+                    try {
+                        c = modelo.cuentaActiva(auxCorreo);
                     } catch (CustomException ex) {
                         Logger.getLogger(CtrlPerfiles.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    if (c.debeCobrar()) {
+                        if (!c.cobrar()) {
+                            JOptionPane.showMessageDialog(vista, "No cuenta con dinero suficiente para continuar");
+                            return;
+                        }
                     }
 
                     modelo.cuentaActiva(auxCorreo).getPerfil(0).setActivo(true);
