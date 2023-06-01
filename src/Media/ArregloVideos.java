@@ -138,17 +138,21 @@ public class ArregloVideos{
         
     }
     
+    public void mostrarTitulosEnConsola(String descripcion, Video[] videos){
+        System.out.println(descripcion);
+        System.out.println("----------------------------");
+        for(Video v :videos){
+            System.out.println(v.getTitulo());
+        }
+        System.out.println("----------------------------");
+    }
+    
     public ArregloVideos getDiezMasVistos(){
         ArregloVideos videosMasVistos = new ArregloVideos();
         Video[] videosOrdenados = videos.clone();
         Video aux = null;
         
-        System.out.println("ARREGLO SIN ORDENAR");
-        System.out.println("----------------------------");
-        for(Video v :videosOrdenados){
-            System.out.println(v.getTitulo());
-        }
-        System.out.println("----------------------------");
+        mostrarTitulosEnConsola("ARREGLO SIN ORDENAR", videosOrdenados);
 
         Arrays.sort(videosOrdenados);
         
@@ -166,12 +170,7 @@ public class ArregloVideos{
             videosMasVistos.agregarVideo(videosOrdenados[i]);
         }
         
-        System.out.println("ARREGLO ORDENADO");
-        System.out.println("----------------------------");
-        for(Video v : videosOrdenados){
-            System.out.println(v.getTitulo());
-        }
-        System.out.println("----------------------------");
+        mostrarTitulosEnConsola("ARREGLO ORDENADO", videosOrdenados);
     
         return videosMasVistos;
     }
