@@ -71,50 +71,68 @@ public class CtrlInicio {
             ArregloDeCuentas modelo1;
             modelo1 = (ArregloDeCuentas) archivo.deserializar(Archivo.archivoArregloCuentas);
             ///////////////////
+
             //CAPTAMOS EL CORREO Y LA CONTRASEÑA
             String correo = vista.txtUsuario.getText();
             String contraseña = vista.txtContraseña.getText().trim();
-            
             if (correo.isEmpty() || contraseña.isEmpty()) {
                 JOptionPane.showMessageDialog(vista, "Ingresa un usuario y/o contraseña válido(s)", "Iniciar sesión", 0);
                 vista.txtContraseña.requestFocus();
                 return;
             }
-            
             try {
-                Boolean estadoSesion = modelo1.verificarEstadoSesion(correo);
-                Boolean estadoMembresia = modelo1.cuentaActiva(correo).getSuscripcion().getEstadoMembresia();
-                
-                if (!estadoMembresia) {
-                    vista.dispose();
-                    System.out.println("CORREO: "+correo);
-                    JOptionPane.showMessageDialog(vista, "NO CUENTA CON SUSCRIPCION ACTIVA");
-                    FrmPaquetes fPlanes = new FrmPaquetes();
-                    CtrlReactivarMembresia cRA = new CtrlReactivarMembresia(fPlanes, modelo1);
-                    cRA.setCorreo(correo);
-                    archivo.serializar(Archivo.archivoArregloCuentas, modelo1);
-                    cRA.init();
-                    return;
-                }
-                
-                if (estadoSesion) {
-                    modelo1.validarInicioSesion(correo, contraseña);
+                boolean estaVerificado = modelo1.verificarEstadoSesion(correo);
+                modelo1.validarInicioSesion(correo, contraseña);
+                if (!estaVerificado) {
                     modelo1.cambiarEstadoSesion(correo);
-                    JOptionPane.showMessageDialog(vista, "¡Bienvenido a Netflix!");
+                    if (!modelo1.cuentaActiva(correo).getSuscripcion().getEstadoMembresia()) {
+                        vista.dispose();
+                        System.out.println("CORREO: "+correo);
+                        JOptionPane.showMessageDialog(vista, "NO CUENTA CON SUSCRIPCION ACTIVA");
+                        FrmPaquetes fPlanes = new FrmPaquetes();
+                        CtrlReactivarMembresia cRA = new CtrlReactivarMembresia(fPlanes, modelo1);
+                        cRA.setCorreo(correo);
+                        archivo.serializar(Archivo.archivoArregloCuentas, modelo1);
+                        cRA.init();
+                    } else {
+                        JOptionPane.showMessageDialog(vista, "¡Bienvenido a Netflix!");
+                        vista.dispose();
+                        FrmPerfiles fPerfil = new FrmPerfiles();
+                        CtrlPerfiles ctrlPerfil = new CtrlPerfiles(modelo1, fPerfil);
+                        ctrlPerfil.setCorreo(correo);
+                        modelo1.cuentaActiva(correo).getUsuario().aumentarDispositivo();
+                        //GUARDANDO SESIÓN//
+                        archivo.serializar(Archivo.archivoArregloCuentas, modelo1);
+                        //////
+                        ctrlPerfil.init();
+                    }
+                } else {
+                    //JOptionPane.showMessageDialog(vista, "¡Bienvenido a Netflix!");
+                    if (!modelo1.cuentaActiva(correo).getSuscripcion().getEstadoMembresia()) {
+                        JOptionPane.showMessageDialog(vista, "NO CUENTA CON SUSCRIPCION ACTIVA");
+                        vista.dispose();
+                        FrmPaquetes fPlanes = new FrmPaquetes();
+                        CtrlReactivarMembresia cRA = new CtrlReactivarMembresia(fPlanes, modelo1);
+                        cRA.setCorreo(correo);
+                        archivo.serializar(Archivo.archivoArregloCuentas, modelo1);
+                        cRA.init();
+                    } else {
+                        vista.dispose();
+                        FrmPerfiles fPerfil = new FrmPerfiles();
+                        CtrlPerfiles ctrlPerfil = new CtrlPerfiles(modelo1, fPerfil);
+                        ctrlPerfil.setCorreo(correo);
+                        ctrlPerfil.init();
+                        modelo1.cuentaActiva(correo).getUsuario().aumentarDispositivo();
+                        //GUARDANDO SESIÓN//
+                        archivo.serializar(Archivo.archivoArregloCuentas, modelo1);
+                    }
                 }
-                
-                vista.dispose();
-                
-                FrmPerfiles fPerfil = new FrmPerfiles();
-                CtrlPerfiles ctrlPerfil = new CtrlPerfiles(modelo1, fPerfil);
-                ctrlPerfil.setCorreo(correo);
-                modelo1.cuentaActiva(correo).getUsuario().aumentarDispositivo();
-                
-                //GUARDANDO SESIÓN//
-                archivo.serializar(Archivo.archivoArregloCuentas, modelo1);
-                //////
-                ctrlPerfil.init();
-            } catch (CustomException e) {
+                //============================== Envío de email =============================================
+                //Email email = new Email("team.algoritmica@gmail.com", "Mensaje de app Iniciada" , mensaje);
+                //Thread enviar = new Thread(email);
+                //enviar.start();
+                //===========================================================================================
+            }catch (CustomException e) {
                 System.out.println("EXCEPCION: " + e.getMessage());
                 JOptionPane.showMessageDialog(vista, e.getMessage());
             }
