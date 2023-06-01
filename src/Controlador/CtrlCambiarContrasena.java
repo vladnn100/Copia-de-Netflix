@@ -24,13 +24,13 @@ import javax.swing.JOptionPane;
  *
  * @author Julian
  */
-public class CtrlCambiarContraseña {
+public class CtrlCambiarContrasena {
 
     private FrmEditarContrasena vista;
     private ArregloDeCuentas modelo;
     private String auxCorreo;
 
-    public CtrlCambiarContraseña(FrmEditarContrasena vista, ArregloDeCuentas modelo) {
+    public CtrlCambiarContrasena(FrmEditarContrasena vista, ArregloDeCuentas modelo) {
         this.vista = vista;
         this.modelo = modelo;
         this.auxCorreo = getCorreo();

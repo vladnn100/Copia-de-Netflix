@@ -133,7 +133,7 @@ public class CtrlAdministrarCuenta {
                 vista.dispose();
 
                 FrmEditarContrasena fEditPass = new FrmEditarContrasena();
-                CtrlCambiarContraseña controlador = new CtrlCambiarContraseña(fEditPass, modelo);
+                CtrlCambiarContrasena controlador = new CtrlCambiarContrasena(fEditPass, modelo);
                 controlador.setCorreo(auxCorreo);
                 controlador.init();
             }
