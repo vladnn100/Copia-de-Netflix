@@ -24,7 +24,7 @@ public class Archivo {
         }
     }
 
-    public Object deserializar(String sNombreArchivo) {
+ /*   public Object deserializar(String sNombreArchivo) {
         Object obj = new Object();
         try {
             ObjectInputStream lector
@@ -38,4 +38,16 @@ public class Archivo {
         }
         return obj;
     }
+  */  
+    
+    public Object deserializar(String sNombreArchivo) {
+    try (ObjectInputStream lector = new ObjectInputStream(new FileInputStream(sNombreArchivo))) {
+        Object obj = lector.readObject();
+        return obj;
+    } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+    } catch (IOException | ClassNotFoundException e) {
+        throw new RuntimeException(e);
+    }
+}
 }
